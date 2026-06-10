@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#070B10"/>
+  <text x="256" y="315" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace" font-size="190" font-weight="800" letter-spacing="-22" fill="#E6EDF3">PD</text>
+  <rect x="142" y="350" width="152" height="16" rx="8" fill="#22C55E"/>
+  <rect x="306" y="350" width="44" height="16" rx="4" fill="#F97316"/>
+</svg>

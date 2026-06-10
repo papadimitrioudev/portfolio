@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Papadimitriou.dev transparent logo mark</title>
+  <desc id="desc">Transparent PD monogram with code brackets.</desc>
+  <defs>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#F97316"/>
+    </linearGradient>
+  </defs>
+  <path d="M178 350 L92 512 L178 674" fill="none" stroke="#38BDF8" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M846 350 L932 512 L846 674" fill="none" stroke="#F97316" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="210" y="226" width="604" height="572" rx="118" fill="#0D1117" stroke="#273449" stroke-width="6"/>
+  <text x="512" y="595" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace" font-size="226" font-weight="800" letter-spacing="-24" fill="#E6EDF3">PD</text>
+  <rect x="321" y="642" width="272" height="22" rx="11" fill="url(#accentGrad)"/>
+  <rect x="614" y="642" width="54" height="22" rx="5" fill="#E6EDF3" opacity="0.9"/>
+</svg>

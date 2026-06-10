@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panagiotis Papadimitriou — Backend Developer in Training</title>
   <meta name="description" content="Panagiotis Papadimitriou — Computer Science graduate building toward backend development with Java & Spring Boot. Athens, Greece." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="apple-touch-icon" href="assets/favicon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -88,8 +91,10 @@
     .logo {
       font-family: var(--mono); font-weight: 600; font-size: 15px;
       color: var(--text); text-decoration: none; letter-spacing: -0.02em;
+      display: inline-flex; align-items: center; gap: 10px;
     }
     .logo span { color: var(--accent); }
+    .logo-mark { width: 27px; height: 27px; display: block; }
     .nav-links { display: flex; gap: 24px; align-items: center; }
     .nav-links a {
       color: var(--muted); text-decoration: none; font-size: 13.5px; font-weight: 500;
@@ -488,7 +493,7 @@
 
   <nav>
     <div class="nav-inner">
-      <a class="logo" href="#">papadimitriou<span>.dev</span></a>
+      <a class="logo" href="#"><img class="logo-mark" src="assets/mark.svg" alt="PD logo" />papadimitriou<span>.dev</span></a>
       <div class="nav-links">
         <a href="#about">About</a>
         <a href="#stack">Stack</a>
