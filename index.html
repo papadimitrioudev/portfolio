@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
   <title>Panagiotis Papadimitriou — Data &amp; Analytics Engineering</title>
   <meta name="description" content="Panagiotis Papadimitriou — telecom support professional and MSc Data Analytics student building toward analytics engineering: SQL, data modeling, BigQuery, dbt, Power BI. Athens, Greece." />
   <link rel="canonical" href="https://papadimitrioudev.netlify.app/" />
@@ -37,7 +37,7 @@
       --display: 'Space Grotesk', 'Inter', sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background: var(--bg); }
     body {
       background: var(--bg);
       color: var(--text);
@@ -527,7 +527,11 @@
     @keyframes riseIn { to { opacity: 1; transform: none; } }
 
     /* ---------- Name glitch (RGB split, hover, desktop only) ---------- */
-    .grad.glitch { position: relative; display: inline-block; }
+    .grad.glitch {
+      position: relative; display: inline-block;
+      -webkit-user-select: none; user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
     @media (prefers-reduced-motion: no-preference) and (pointer: fine) {
       .glitch:hover::before, .glitch:hover::after {
         content: attr(data-text); position: absolute; left: 0; top: 0;
@@ -984,9 +988,10 @@
       navToggle.setAttribute('aria-expanded', 'false');
     }));
 
-    /* ---------- 3D starfield + synthwave grid (desktop only, motion allowed) ---------- */
+    /* ---------- 3D starfield + synthwave grid (lite mode on mobile) ---------- */
     const canvas = document.getElementById('stars');
-    if (!reduced && !smallScreen) {
+    if (!reduced) {
+      const lite = smallScreen; // mobile: fewer stars, no grid/lines/parallax
       const ctx = canvas.getContext('2d');
       const DEPTH = 1200, FOV = 420, LINK = 72;
       let W, H, CX, CY, pts = [];
@@ -996,7 +1001,7 @@
         W = canvas.width = window.innerWidth;
         H = canvas.height = window.innerHeight;
         CX = W / 2; CY = H * 0.38;
-        const count = Math.min(240, Math.floor(W / 6));
+        const count = lite ? 55 : Math.min(240, Math.floor(W / 6));
         pts = Array.from({ length: count }, () => ({
           x: (Math.random() * 2 - 1) * W,
           y: (Math.random() * 2 - 1) * H * 0.9,
@@ -1005,10 +1010,12 @@
         }));
       }
 
-      window.addEventListener('pointermove', (e) => {
-        mx = e.clientX / W - 0.5;
-        my = e.clientY / H - 0.5;
-      }, { passive: true });
+      if (!lite) {
+        window.addEventListener('pointermove', (e) => {
+          mx = e.clientX / W - 0.5;
+          my = e.clientY / H - 0.5;
+        }, { passive: true });
+      }
 
       function drawGrid() {
         // hero-only: fades out as you scroll into content
@@ -1039,7 +1046,7 @@
         ctx.clearRect(0, 0, W, H);
         px += (mx - px) * 0.05;
         py += (my - py) * 0.05;
-        drawGrid();
+        if (!lite) drawGrid();
         // 3D-projected starfield with slow forward drift + mouse parallax
         const proj = [];
         for (const p of pts) {
@@ -1059,7 +1066,7 @@
           ctx.arc(x, y, 0.4 + depth * 1.8, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(160, 220, 200, ${(0.15 + depth * 0.55) * twinkle})`;
           ctx.fill();
-          if (depth > 0.55) proj.push({ x, y });
+          if (!lite && depth > 0.55) proj.push({ x, y });
         }
         // constellation lines between near (bright) stars
         for (let i = 0; i < proj.length; i++) {
@@ -1216,18 +1223,28 @@
       termObs.observe(document.getElementById('term-body'));
     }
 
-    /* ---------- Easter egg: type "prince" → the Breach ---------- */
+    /* ---------- Easter egg: type "prince" (desktop) or 5 taps on the name (mobile) ---------- */
+    function triggerBreach() {
+      if (document.body.classList.contains('breach')) return;
+      document.body.classList.add('breach');
+      console.log('%cTHE BREACH REMEMBERS.', 'color:#a78bfa; font-family:monospace; font-size:16px;');
+      console.log('%c— The Forsaken Prince, someday.', 'color:#8a9ab2; font-family:monospace;');
+      setTimeout(() => document.body.classList.remove('breach'), 3600);
+    }
     let keyBuf = '';
     window.addEventListener('keydown', (e) => {
       if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
       if (/input|textarea/i.test(document.activeElement.tagName)) return;
       keyBuf = (keyBuf + e.key.toLowerCase()).slice(-6);
-      if (keyBuf === 'prince' && !document.body.classList.contains('breach')) {
-        document.body.classList.add('breach');
-        console.log('%cTHE BREACH REMEMBERS.', 'color:#a78bfa; font-family:monospace; font-size:16px;');
-        console.log('%c— The Forsaken Prince, someday.', 'color:#8a9ab2; font-family:monospace;');
-        setTimeout(() => document.body.classList.remove('breach'), 3600);
-      }
+      if (keyBuf === 'prince') triggerBreach();
+    });
+    const nameEl = document.querySelector('h1 .glitch');
+    let taps = 0, tapTimer;
+    nameEl.addEventListener('click', () => {
+      taps++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => { taps = 0; }, 1200);
+      if (taps >= 5) { taps = 0; triggerBreach(); }
     });
   </script>
 </body>
