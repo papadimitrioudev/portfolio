@@ -1033,7 +1033,7 @@
         H = canvas.height = window.innerHeight;
         CX = W / 2; CY = H * 0.38;
         // layer 1: distant stars covering the WHOLE screen (always visible)
-        const farCount = lite ? 45 : Math.min(150, Math.floor(W / 11));
+        const farCount = lite ? 70 : Math.min(150, Math.floor(W / 11));
         far = Array.from({ length: farCount }, () => ({
           x: Math.random() * W,
           y: Math.random() * H,
@@ -1042,7 +1042,7 @@
           tw: Math.random() * Math.PI * 2,
         }));
         // layer 2: 3D stars with depth, drift and mouse parallax
-        const count = lite ? 30 : Math.min(240, Math.floor(W / 6));
+        const count = lite ? 50 : Math.min(240, Math.floor(W / 6));
         pts = Array.from({ length: count }, () => ({
           x: (Math.random() * 2 - 1) * W,
           y: (Math.random() * 2 - 1) * H * 0.9,
@@ -1055,6 +1055,13 @@
         window.addEventListener('pointermove', (e) => {
           mx = e.clientX / W - 0.5;
           my = e.clientY / H - 0.5;
+        }, { passive: true });
+      } else {
+        // mobile magic: tilt the phone → the sky shifts (gyroscope parallax)
+        window.addEventListener('deviceorientation', (e) => {
+          if (e.gamma == null || e.beta == null) return;
+          mx = Math.max(-0.5, Math.min(0.5, e.gamma / 60));
+          my = Math.max(-0.5, Math.min(0.5, (e.beta - 45) / 90));
         }, { passive: true });
       }
 
@@ -1097,8 +1104,8 @@
           ctx.fillStyle = `rgba(170, 225, 205, ${alpha})`;
           ctx.fill();
         }
-        if (!lite) drawGrid();
-        // 3D-projected starfield with slow forward drift + mouse parallax
+        drawGrid();
+        // 3D-projected starfield with slow forward drift + parallax
         const proj = [];
         for (const p of pts) {
           p.z -= 0.4;
@@ -1117,7 +1124,7 @@
           ctx.arc(x, y, 0.6 + depth * 2.2, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(165, 225, 205, ${(0.28 + depth * 0.6) * twinkle})`;
           ctx.fill();
-          if (!lite && depth > 0.55) proj.push({ x, y });
+          if (depth > 0.55) proj.push({ x, y });
         }
         // constellation lines between near (bright) stars
         for (let i = 0; i < proj.length; i++) {
