@@ -3,14 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panagiotis Papadimitriou — Backend Developer in Training</title>
-  <meta name="description" content="Panagiotis Papadimitriou — Computer Science graduate building toward backend development with Java & Spring Boot. Athens, Greece." />
+  <title>Panagiotis Papadimitriou — Data &amp; Analytics Engineering</title>
+  <meta name="description" content="Panagiotis Papadimitriou — telecom support professional and MSc Data Analytics student building toward analytics engineering: SQL, data modeling, BigQuery, dbt, Power BI. Athens, Greece." />
+  <link rel="canonical" href="https://papadimitrioudev.netlify.app/" />
+  <meta name="theme-color" content="#05080f" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Panagiotis Papadimitriou — Data &amp; Analytics Engineering" />
+  <meta property="og:description" content="Support → data, in public. SQL, dimensional modeling, BigQuery, dbt, Power BI — every query written by hand." />
+  <meta property="og:url" content="https://papadimitrioudev.netlify.app/" />
+  <meta property="og:image" content="https://papadimitrioudev.netlify.app/assets/favicon-192.png" />
+  <meta name="twitter:card" content="summary" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="apple-touch-icon" href="assets/favicon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #05080f;
@@ -19,7 +27,7 @@
       --border: rgba(45, 62, 88, 0.5);
       --border-hover: rgba(52, 211, 153, 0.45);
       --text: #e6edf7;
-      --muted: #8a9ab2;
+      --muted: #98a7bd;
       --accent: #34d399;
       --accent2: #38bdf8;
       --accent3: #a78bfa;
@@ -40,6 +48,14 @@
     }
     ::selection { background: var(--accent); color: #052e1e; }
     a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 2px solid var(--accent2); outline-offset: 3px; border-radius: 4px; }
+
+    .skip-link {
+      position: absolute; left: -9999px; top: 8px; z-index: 200;
+      background: var(--accent); color: #052e1e; padding: 10px 16px;
+      border-radius: 8px; font-weight: 600; text-decoration: none;
+    }
+    .skip-link:focus { left: 8px; }
 
     /* ================= Background layers ================= */
     #stars { position: fixed; inset: 0; z-index: -3; }
@@ -63,7 +79,9 @@
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background: radial-gradient(560px circle at var(--mx, 50%) var(--my, 30%),
         rgba(52, 211, 153, 0.055), transparent 70%);
+      display: none;
     }
+    @media (pointer: fine) { #spotlight { display: block; } }
 
     #progress {
       position: fixed; top: 0; left: 0; height: 3px; width: 0%;
@@ -77,7 +95,7 @@
     nav {
       position: fixed; top: 14px; left: 50%; transform: translateX(-50%);
       z-index: 50; width: min(1010px, calc(100% - 32px));
-      background: rgba(9, 14, 24, 0.66);
+      background: rgba(9, 14, 24, 0.8);
       backdrop-filter: blur(16px) saturate(1.4);
       -webkit-backdrop-filter: blur(16px) saturate(1.4);
       border: 1px solid var(--border);
@@ -85,31 +103,37 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
     }
     .nav-inner {
-      padding: 13px 22px;
-      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 18px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
     }
     .logo {
-      font-family: var(--mono); font-weight: 600; font-size: 15px;
+      font-family: var(--mono); font-weight: 500; font-size: 15px;
       color: var(--text); text-decoration: none; letter-spacing: -0.02em;
-      display: inline-flex; align-items: center; gap: 10px;
+      display: inline-flex; align-items: center; gap: 10px; min-height: 44px;
     }
     .logo span { color: var(--accent); }
     .logo-mark { width: 27px; height: 27px; display: block; }
-    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links { display: flex; gap: 6px; align-items: center; }
     .nav-links a {
       color: var(--muted); text-decoration: none; font-size: 13.5px; font-weight: 500;
-      transition: color .2s;
+      transition: color .2s; padding: 10px 9px; min-height: 44px;
+      display: inline-flex; align-items: center;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--accent); }
     .nav-cv {
       border: 1px solid rgba(52, 211, 153, 0.55); color: var(--accent) !important;
-      padding: 7px 15px; border-radius: 9px; font-family: var(--mono);
-      transition: background .2s, box-shadow .25s !important;
+      padding: 8px 15px !important; border-radius: 9px; font-family: var(--mono);
+      transition: background .2s, box-shadow .25s !important; margin-left: 6px;
     }
     .nav-cv:hover { background: var(--accent-dim); box-shadow: 0 0 22px rgba(52,211,153,.3); }
+    #nav-toggle {
+      display: none; background: none; border: 1px solid var(--border);
+      border-radius: 9px; color: var(--text); font-size: 20px; line-height: 1;
+      width: 44px; height: 44px; cursor: pointer;
+    }
 
     /* ================= Hero ================= */
-    header { min-height: 100vh; display: flex; align-items: center; padding-top: 90px; position: relative; }
+    header { min-height: 100svh; display: flex; align-items: center; padding: 110px 0 40px; position: relative; }
     .hero-grid { display: grid; grid-template-columns: 1.12fr 1fr; gap: 60px; align-items: center; }
 
     .badge {
@@ -130,7 +154,7 @@
 
     h1 {
       font-family: var(--display);
-      font-size: clamp(42px, 6.4vw, 68px);
+      font-size: clamp(40px, 6.4vw, 68px);
       font-weight: 700; letter-spacing: -0.035em; line-height: 1.02;
       margin-bottom: 18px;
     }
@@ -143,7 +167,7 @@
     @keyframes sheen { to { background-position: 200% center; } }
 
     .hero-sub {
-      font-size: clamp(18px, 2.6vw, 24px); font-weight: 600;
+      font-size: clamp(17px, 2.6vw, 24px); font-weight: 600;
       letter-spacing: -0.015em; color: var(--muted);
       margin-bottom: 26px; min-height: 1.6em;
     }
@@ -157,7 +181,7 @@
     .btn-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
     .btn {
       position: relative; display: inline-flex; align-items: center; gap: 9px;
-      padding: 13px 24px; border-radius: 11px;
+      padding: 13px 24px; border-radius: 11px; min-height: 48px;
       font-size: 15px; font-weight: 600; text-decoration: none;
       transition: transform .18s cubic-bezier(.2,.8,.3,1.2), box-shadow .25s, border-color .2s, color .2s;
       will-change: transform;
@@ -172,14 +196,15 @@
     .btn-ghost { border: 1px solid var(--border); color: var(--text); background: rgba(255,255,255,0.02); }
     .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-    .hero-socials { display: flex; gap: 18px; margin-top: 34px; }
+    .hero-socials { display: flex; gap: 12px; margin-top: 30px; }
     .hero-socials a {
       font-family: var(--mono); font-size: 13px; color: var(--muted);
       text-decoration: none; transition: color .2s, transform .2s;
+      padding: 8px 6px; min-height: 44px; display: inline-flex; align-items: center;
     }
     .hero-socials a:hover { color: var(--accent); transform: translateY(-2px); }
 
-    /* ---------- Code window ---------- */
+    /* ---------- Code window (SQL) ---------- */
     .code-wrap { position: relative; perspective: 1100px; }
     .code-window {
       position: relative;
@@ -205,11 +230,11 @@
     .cw-title { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--muted); }
     .cw-body {
       padding: 22px 24px; font-family: var(--mono);
-      font-size: 13.4px; line-height: 1.8; white-space: pre;
+      font-size: 13.2px; line-height: 1.8; white-space: pre;
       overflow-x: auto;
     }
     .tk-kw { color: #c792ea; } .tk-cl { color: #ffcb6b; } .tk-st { color: #9ece8c; }
-    .tk-cm { color: #56688a; font-style: italic; } .tk-fn { color: #82aaff; }
+    .tk-cm { color: #6b7fa3; font-style: italic; } .tk-fn { color: #82aaff; }
 
     .float-chip {
       position: absolute; z-index: 2;
@@ -221,8 +246,8 @@
       backdrop-filter: blur(8px);
       animation: bob 5s ease-in-out infinite;
     }
-    .chip-java { top: -18px; right: 26px; color: var(--accent); border-color: rgba(52,211,153,.4); }
-    .chip-spring { bottom: -16px; left: 22px; color: var(--accent2); border-color: rgba(56,189,248,.4); animation-delay: -2.5s; }
+    .chip-sql { top: -18px; right: 26px; color: var(--accent); border-color: rgba(52,211,153,.4); }
+    .chip-dbt { bottom: -16px; left: 22px; color: var(--accent2); border-color: rgba(56,189,248,.4); animation-delay: -2.5s; }
     @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
 
     /* ================= Marquee ================= */
@@ -275,11 +300,11 @@
       background: rgba(255,255,255,0.015);
     }
     .term-bar .cw-title { margin-left: auto; }
-    .term-body { padding: 18px 20px; line-height: 2.05; }
+    .term-body { padding: 18px 20px; line-height: 2.05; overflow-x: auto; }
     .term-body .pr { color: var(--accent); }
     .term-body .key { color: var(--accent2); }
     .term-body .val { color: var(--text); }
-    .term-body .cm { color: #56688a; }
+    .term-body .cm { color: #6b7fa3; }
 
     /* ================= Stats ================= */
     .stats-row {
@@ -378,7 +403,7 @@
     .t-item .t-org { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
     .t-item p.t-desc { color: var(--muted); font-size: 15px; max-width: 700px; }
 
-    /* ================= Now ================= */
+    /* ================= Roadmap card ================= */
     .now-card {
       position: relative;
       background: linear-gradient(140deg, rgba(17,24,38,.92), rgba(20,30,46,.92));
@@ -419,7 +444,7 @@
       overflow: hidden; margin: 0 0 10px; position: relative; z-index: 1;
     }
     .progress-fill {
-      height: 100%; width: 18%;
+      height: 100%; width: 3%;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
       border-radius: 99px; position: relative; overflow: hidden;
       box-shadow: 0 0 16px rgba(52, 211, 153, 0.55);
@@ -431,6 +456,35 @@
     }
     @keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(220%); } }
     .progress-label { font-family: var(--mono); font-size: 12.5px; color: var(--muted); position: relative; z-index: 1; }
+
+    /* ================= Projects ================= */
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 22px; }
+    .proj-card {
+      display: flex; flex-direction: column; gap: 14px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px;
+      backdrop-filter: blur(8px);
+      transition: transform .25s ease-out, border-color .25s, box-shadow .3s;
+    }
+    .proj-card:hover {
+      border-color: var(--border-hover); transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(52, 211, 153, 0.09);
+    }
+    .proj-status {
+      align-self: flex-start;
+      font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em;
+      padding: 5px 12px; border-radius: 99px;
+      border: 1px solid rgba(56,189,248,.4); color: var(--accent2);
+      background: rgba(56,189,248,.07);
+    }
+    .proj-status.planned { border-color: var(--border); color: var(--muted); background: rgba(255,255,255,.02); }
+    .proj-card h3 { font-family: var(--display); font-size: 18px; font-weight: 600; }
+    .proj-card .q { color: var(--muted); font-size: 14.5px; flex: 1; }
+    .proj-card .q strong { color: var(--text); font-weight: 600; }
+    .proj-link {
+      font-family: var(--mono); font-size: 13px; color: var(--muted);
+      text-decoration: none; opacity: .65; cursor: default;
+    }
 
     /* ================= Contact ================= */
     .contact { text-align: center; }
@@ -445,10 +499,11 @@
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
     .contact p { color: var(--muted); max-width: 500px; margin: 0 auto 36px; }
-    .socials { display: flex; justify-content: center; gap: 22px; margin-top: 40px; }
+    .socials { display: flex; justify-content: center; gap: 14px; margin-top: 40px; }
     .socials a {
       color: var(--muted); text-decoration: none; font-size: 14px;
       font-family: var(--mono); transition: color .2s, transform .2s;
+      padding: 10px 8px; min-height: 44px; display: inline-flex; align-items: center;
     }
     .socials a:hover { color: var(--accent); transform: translateY(-2px); }
 
@@ -468,53 +523,83 @@
       *, *::before, *::after { animation: none !important; transition: none !important; }
       html { scroll-behavior: auto; }
       .reveal { opacity: 1; transform: none; }
+      #stars { display: none; }
     }
 
+    /* ================= Responsive ================= */
     @media (max-width: 880px) {
       .hero-grid { grid-template-columns: 1fr; gap: 48px; }
       .code-wrap { max-width: 520px; }
     }
     @media (max-width: 720px) {
-      .nav-links a:not(.nav-cv) { display: none; }
+      #nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+      .nav-links {
+        position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+        flex-direction: column; align-items: stretch; gap: 0;
+        background: rgba(9, 14, 24, 0.96);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--border); border-radius: 14px;
+        padding: 8px; display: none;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px 14px; border-radius: 9px; }
+      .nav-links a:hover { background: rgba(255,255,255,.03); }
+      .nav-cv { margin: 6px 6px 2px; justify-content: center; }
       .about-grid { grid-template-columns: 1fr; }
       .stats-row { grid-template-columns: 1fr; }
       section { padding: 68px 0; }
       .now-card { padding: 30px 24px; }
+      .container { padding: 0 20px; }
+      .cw-body { font-size: 12px; padding: 16px 16px; }
+      .float-chip { display: none; }
+      .t-card { padding: 22px 20px; }
+      .t-card:hover { transform: none; }
+    }
+    @media (max-width: 420px) {
+      h1 { font-size: 38px; }
+      .btn { width: 100%; justify-content: center; }
     }
   </style>
 </head>
 <body>
 
-  <canvas id="stars"></canvas>
-  <div class="bg-fx"></div>
-  <div class="bg-grid"></div>
-  <div id="spotlight"></div>
-  <div id="progress"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <nav>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="bg-fx" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div id="spotlight" aria-hidden="true"></div>
+  <div id="progress" aria-hidden="true"></div>
+
+  <nav aria-label="Main navigation">
     <div class="nav-inner">
-      <a class="logo" href="#"><img class="logo-mark" src="assets/mark.svg" alt="PD logo" />papadimitriou<span>.dev</span></a>
-      <div class="nav-links">
+      <a class="logo" href="#"><img class="logo-mark" src="assets/mark.svg" alt="" width="27" height="27" />papadimitriou<span>.dev</span></a>
+      <button id="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation">☰</button>
+      <div class="nav-links" id="nav-menu">
         <a href="#about">About</a>
         <a href="#stack">Stack</a>
         <a href="#experience">Experience</a>
-        <a href="#now">Now</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
         <a class="nav-cv" href="Panagiotis_Papadimitriou_CV.pdf" download>CV ↓</a>
       </div>
     </div>
   </nav>
 
+  <main id="main">
+
   <header>
     <div class="container hero-grid">
       <div>
-        <span class="badge"><span class="dot"></span>open to junior backend roles — Athens</span>
+        <span class="badge"><span class="dot"></span>support → data, in public — Athens</span>
         <h1>Panagiotis<br><span class="grad">Papadimitriou</span></h1>
-        <p class="hero-sub">I build toward <span class="typed" id="typed">backend development</span><span class="caret">_</span></p>
+        <p class="hero-sub">I'm building toward <span class="typed" id="typed">analytics engineering</span><span class="caret" aria-hidden="true">_</span></p>
         <p class="hero-desc">
-          Computer Science graduate pursuing an <strong>MSc in Data Analytics</strong>,
-          training hands-on in <strong>Java &amp; Spring Boot</strong> — writing every
-          line myself, the hard way.
+          Telecom support professional pursuing an <strong>MSc in Data Analytics</strong>,
+          training hands-on in <strong>SQL, data modeling, BigQuery, dbt &amp; Power BI</strong> —
+          writing every query myself, the hard way.
         </p>
         <div class="btn-row">
           <a class="btn btn-primary magnetic" href="Panagiotis_Papadimitriou_CV.pdf" download>Download CV</a>
@@ -527,33 +612,31 @@
       </div>
 
       <div class="code-wrap">
-        <span class="float-chip chip-java">☕ Java 21</span>
-        <span class="float-chip chip-spring">🍃 Spring Boot 3</span>
+        <span class="float-chip chip-sql" aria-hidden="true">🗄 SQL</span>
+        <span class="float-chip chip-dbt" aria-hidden="true">⚙ dbt</span>
         <div class="code-window" id="tilt-card">
           <div class="cw-bar">
             <span class="cw-dot" style="background:#ff5f57"></span>
             <span class="cw-dot" style="background:#febc2e"></span>
             <span class="cw-dot" style="background:#28c840"></span>
-            <span class="cw-title">Panagiotis.java</span>
+            <span class="cw-title">mission.sql</span>
           </div>
-          <div class="cw-body"><span class="tk-cm">// work in progress — compiled daily</span>
-<span class="tk-kw">public class</span> <span class="tk-cl">Panagiotis</span> {
-
-  <span class="tk-kw">private final</span> <span class="tk-cl">String</span> base  = <span class="tk-st">"Athens, GR"</span>;
-  <span class="tk-kw">private final</span> <span class="tk-cl">String</span> focus = <span class="tk-st">"Java • Spring Boot"</span>;
-
-  <span class="tk-kw">public</span> <span class="tk-cl">String</span> <span class="tk-fn">mission</span>() {
-    <span class="tk-kw">return</span> <span class="tk-st">"Junior Java Developer"</span>;
-  }
-}</div>
+          <div class="cw-body"><span class="tk-cm">-- work in progress, queried daily</span>
+<span class="tk-kw">SELECT</span>
+    <span class="tk-st">'Athens, GR'</span>          <span class="tk-kw">AS</span> base,
+    <span class="tk-st">'SQL • modeling • dbt'</span> <span class="tk-kw">AS</span> focus,
+    <span class="tk-fn">COUNT</span>(*)             <span class="tk-kw">AS</span> queries_by_hand
+<span class="tk-kw">FROM</span> <span class="tk-cl">daily_practice</span>
+<span class="tk-kw">WHERE</span> written_by = <span class="tk-st">'me'</span>
+  <span class="tk-kw">AND</span> pasted_blindly = <span class="tk-kw">FALSE</span>;</div>
         </div>
       </div>
     </div>
   </header>
 
-  <div class="marquee">
+  <div class="marquee" aria-hidden="true">
     <div class="marquee-track" id="marquee">
-      <span>JAVA 21 <b>•</b></span><span>SPRING BOOT 3 <b>•</b></span><span>POSTGRESQL <b>•</b></span><span>REST APIs <b>•</b></span><span>JPA / HIBERNATE <b>•</b></span><span>MAVEN <b>•</b></span><span>JUNIT <b>•</b></span><span>GIT <b>•</b></span><span>PYTHON <b>•</b></span><span>SQL <b>•</b></span><span>BIG DATA <b>•</b></span>
+      <span>SQL <b>•</b></span><span>POSTGRESQL <b>•</b></span><span>DUCKDB <b>•</b></span><span>DATA MODELING <b>•</b></span><span>BIGQUERY <b>•</b></span><span>DBT <b>•</b></span><span>PYTHON / PANDAS <b>•</b></span><span>POWER BI <b>•</b></span><span>GIT <b>•</b></span><span>STATISTICS <b>•</b></span>
     </div>
   </div>
 
@@ -568,18 +651,20 @@
         <div class="about-text">
           <p>
             I'm Panagiotis, 23, based in Athens. I hold a <strong>BSc in Computer Science</strong>
-            (Mediterranean College / University of Derby) and I'm working on an
+            (Mediterranean College / University of Derby) and I'm in the final year of an
             <strong>MSc in Data Analytics &amp; Big Data</strong>.
           </p>
           <p>
-            By day I work in <strong>technical support</strong>, troubleshooting real customer
-            problems under pressure — the same problems I eventually want to solve at the
-            code level. That's why I'm on a focused roadmap into
-            <strong>backend development with Java</strong>.
+            By day I do <strong>technical support for a telecom provider</strong> — tickets,
+            SLAs, churn-risk conversations, network faults. That's exactly the data an
+            analytics team lives on. So I'm on a focused, dated roadmap into
+            <strong>data &amp; analytics engineering</strong>: SQL in depth, dimensional
+            modeling, cloud warehousing with BigQuery, dbt.
           </p>
           <p>
-            I care about doing things properly: clean code, version control,
-            understanding <em>why</em> something works — not just making it run.
+            The rule that defines this roadmap: <em>I write every query myself.</em>
+            AI is my reviewer and rubber duck — never my ghostwriter. If I can't defend
+            a query line by line, it doesn't ship.
           </p>
         </div>
         <div class="terminal reveal reveal-d2">
@@ -593,9 +678,9 @@
 <span class="pr">$</span> cat profile.yml<br>
 <span class="key">location:</span> <span class="val">Athens, Greece</span><br>
 <span class="key">degree:</span> <span class="val">BSc Computer Science</span><br>
-<span class="key">msc:</span> <span class="val">Data Analytics — in progress</span><br>
-<span class="key">work:</span> <span class="val">Tech Support @ BFS (Nova)</span><br>
-<span class="key">target:</span> <span class="val">Junior Java Developer</span><br>
+<span class="key">msc:</span> <span class="val">Data Analytics — final year</span><br>
+<span class="key">work:</span> <span class="val">Telecom Support @ BFS (Nova)</span><br>
+<span class="key">target:</span> <span class="val">Analytics Engineering</span><br>
 <span class="pr">$</span> <span class="cm">█</span>
           </div>
         </div>
@@ -603,8 +688,8 @@
 
       <div class="stats-row reveal reveal-d3">
         <div class="stat"><div class="num">2024</div><div class="lbl">BSc Computer Science</div></div>
-        <div class="stat"><div class="num">2</div><div class="lbl">portfolio projects in the making</div></div>
-        <div class="stat"><div class="num">100%</div><div class="lbl">code written &amp; understood by me</div></div>
+        <div class="stat"><div class="num">3</div><div class="lbl">portfolio projects in the making</div></div>
+        <div class="stat"><div class="num">100%</div><div class="lbl">of roadmap queries written by hand</div></div>
       </div>
     </div>
   </section>
@@ -618,33 +703,32 @@
       </div>
       <div class="stack-grid">
         <div class="stack-card tilt">
-          <h3><span class="stack-icon">☕</span>Learning now — Backend</h3>
+          <h3><span class="stack-icon" aria-hidden="true">🗄</span>Learning now</h3>
           <div class="tag-row">
-            <span class="tag">Java 21</span>
-            <span class="tag">Spring Boot 3</span>
-            <span class="tag">JPA / Hibernate</span>
-            <span class="tag">PostgreSQL</span>
-            <span class="tag">Maven</span>
-            <span class="tag">JUnit</span>
-          </div>
-        </div>
-        <div class="stack-card tilt">
-          <h3><span class="stack-icon">{}</span>Programming &amp; Data</h3>
-          <div class="tag-row">
-            <span class="tag">Python</span>
-            <span class="tag">C</span>
             <span class="tag">SQL</span>
-            <span class="tag">Data Analysis</span>
-            <span class="tag">Big Data (MSc)</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">DuckDB</span>
+            <span class="tag">Dimensional modeling</span>
+            <span class="tag">Git / GitHub</span>
           </div>
         </div>
         <div class="stack-card tilt">
-          <h3><span class="stack-icon">&gt;_</span>Tools &amp; Web</h3>
+          <h3><span class="stack-icon" aria-hidden="true">⚙</span>Next on the roadmap</h3>
           <div class="tag-row">
-            <span class="tag">Git / GitHub</span>
-            <span class="tag dim">JavaScript</span>
-            <span class="tag dim">HTML / CSS</span>
-            <span class="tag dim">C#</span>
+            <span class="tag dim">BigQuery</span>
+            <span class="tag dim">dbt Core</span>
+            <span class="tag dim">Python / pandas</span>
+            <span class="tag dim">Power BI</span>
+            <span class="tag dim">Statistics</span>
+          </div>
+        </div>
+        <div class="stack-card tilt">
+          <h3><span class="stack-icon" aria-hidden="true">◆</span>Foundation</h3>
+          <div class="tag-row">
+            <span class="tag dim">BSc Computer Science</span>
+            <span class="tag dim">MSc Data Analytics</span>
+            <span class="tag dim">Telecom support domain</span>
+            <span class="tag dim">Excel</span>
           </div>
         </div>
       </div>
@@ -667,8 +751,9 @@
             </div>
             <p class="t-org">BFS — Nova account · Athens</p>
             <p class="t-desc">Front-line technical support for Nova customers: diagnosing connectivity
-               and service issues, guiding users through structured troubleshooting,
-               and escalating complex cases with clear documentation.</p>
+               and service issues, structured troubleshooting, and escalating complex cases
+               with clear documentation. Daily contact with the exact data — tickets, SLAs,
+               churn drivers — that my analytics roadmap is built around.</p>
           </div>
         </div>
         <div class="t-item reveal reveal-d1">
@@ -686,57 +771,106 @@
         <div class="t-item reveal reveal-d2">
           <div class="t-card">
             <div class="t-top">
-              <h3>BSc Computer Science</h3>
-              <span class="t-date">Jul 2024</span>
+              <h3>BSc Computer Science → MSc Data Analytics</h3>
+              <span class="t-date">Jul 2024 — now</span>
             </div>
             <p class="t-org">Mediterranean College / University of Derby</p>
-            <p class="t-desc">Graduated July 2024. Continuing with an MSc in Data Analytics &amp; Big Data.</p>
+            <p class="t-desc">BSc completed July 2024. MSc in Data Analytics &amp; Big Data:
+               year one done (Big Data processing, statistics in R, NLP), final year in progress.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="now" class="soft">
+  <section id="roadmap" class="soft">
     <div class="container reveal">
       <div class="section-head">
         <span class="section-num">04.</span>
-        <h2>What I'm Building</h2>
+        <h2>The Roadmap</h2>
         <span class="section-line"></span>
       </div>
       <div class="now-card">
         <p>
-          I'm on a focused <strong>3–4 month roadmap to Junior Java Developer</strong>.
-          Two production-style projects are on the way — a <strong>support-desk REST API</strong>
-          and a <strong>support analytics service</strong>. They'll appear here when they're
-          worth showing. <strong>No filler projects.</strong>
+          A focused, dated roadmap to <strong>junior Data Analyst / Analytics Engineer</strong> —
+          roughly six hours a week, tracked publicly and honestly. Three telecom-flavored
+          projects ship along the way: <strong>support-ticket analysis in SQL</strong>, an
+          <strong>end-to-end BigQuery → dbt → Power BI pipeline</strong>, and a
+          <strong>Python analysis of real network-quality data</strong>. <strong>No filler projects.</strong>
         </p>
         <div class="roadmap-chips">
-          <span class="chip done">✓ setup &amp; git</span>
-          <span class="chip active">● core java</span>
-          <span class="chip">oop</span>
-          <span class="chip">collections</span>
-          <span class="chip">spring boot 3</span>
-          <span class="chip">rest apis</span>
-          <span class="chip">postgresql</span>
-          <span class="chip">junit</span>
-          <span class="chip">projects</span>
+          <span class="chip done">✓ pivot &amp; setup</span>
+          <span class="chip active">● sql deep-dive</span>
+          <span class="chip">data modeling</span>
+          <span class="chip">project 1 — oct '26</span>
+          <span class="chip">bigquery</span>
+          <span class="chip">dbt</span>
+          <span class="chip">power bi</span>
+          <span class="chip">project 2 — jan '27</span>
+          <span class="chip">python</span>
+          <span class="chip">statistics</span>
+          <span class="chip">project 3 — mar '27</span>
         </div>
-        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div class="progress-track" role="progressbar" aria-valuenow="3" aria-valuemin="0" aria-valuemax="100" aria-label="Roadmap progress"><div class="progress-fill"></div></div>
         <p class="progress-label">roadmap progress — updated as I go, honestly</p>
       </div>
     </div>
   </section>
 
-  <section id="contact" class="contact">
+  <section id="projects">
+    <div class="container reveal">
+      <div class="section-head">
+        <span class="section-num">05.</span>
+        <h2>Projects</h2>
+        <span class="section-line"></span>
+      </div>
+      <div class="proj-grid">
+        <article class="proj-card reveal">
+          <span class="proj-status">in progress — shipping Oct 2026</span>
+          <h3>Support Ticket Analysis</h3>
+          <p class="q"><strong>Which fault categories drive repeat contacts, and where does
+             the SLA actually break?</strong> Dimensional model (star schema) and deep-dive
+             SQL on synthetic telecom support tickets — the domain I work in every day.</p>
+          <div class="tag-row">
+            <span class="tag dim">PostgreSQL</span><span class="tag dim">Star schema</span><span class="tag dim">Window functions</span>
+          </div>
+          <span class="proj-link">github — soon</span>
+        </article>
+        <article class="proj-card reveal reveal-d1">
+          <span class="proj-status">up next — Jan 2027</span>
+          <h3>Telco Churn Pipeline</h3>
+          <p class="q"><strong>Which customers are leaving, and which segment should retention
+             focus on first?</strong> End-to-end: raw data → BigQuery → tested &amp; documented
+             dbt models → a Power BI dashboard that answers the question.</p>
+          <div class="tag-row">
+            <span class="tag dim">BigQuery</span><span class="tag dim">dbt Core</span><span class="tag dim">Power BI</span>
+          </div>
+          <span class="proj-link">github — soon</span>
+        </article>
+        <article class="proj-card reveal reveal-d2">
+          <span class="proj-status planned">planned — Mar 2027</span>
+          <h3>Network Quality: Greece</h3>
+          <p class="q"><strong>Where is fixed internet weakest in Greece — and is it getting
+             better?</strong> Real open data, ingested with code, cleaned with documented
+             decisions, analyzed in Python.</p>
+          <div class="tag-row">
+            <span class="tag dim">Python</span><span class="tag dim">pandas</span><span class="tag dim">Open data</span>
+          </div>
+          <span class="proj-link">github — soon</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact soft">
     <div class="container reveal">
       <div class="section-head" style="justify-content:center;">
-        <span class="section-num">05.</span>
+        <span class="section-num">06.</span>
         <h2>Contact</h2>
       </div>
-      <p class="big">Let's build <span class="grad">something</span>.</p>
-      <p>Open to junior backend opportunities in Athens and always happy
-         to connect with other developers.</p>
+      <p class="big">Let's talk <span class="grad">data</span>.</p>
+      <p>Open to conversations about junior data &amp; analytics opportunities in Athens —
+         and always happy to connect with people doing this work.</p>
       <div class="btn-row" style="justify-content:center;">
         <a class="btn btn-primary magnetic" href="mailto:panospdm24@icloud.com">panospdm24@icloud.com</a>
         <a class="btn btn-ghost magnetic" href="Panagiotis_Papadimitriou_CV.pdf" download>Download CV ↓</a>
@@ -748,60 +882,80 @@
     </div>
   </section>
 
+  </main>
+
   <footer>
-    <p><span class="pr">$</span> echo "© 2026 Panagiotis Papadimitriou — built by hand, no templates."</p>
+    <p><span class="pr">$</span> echo "© 2026 Panagiotis Papadimitriou — every query written by hand."</p>
   </footer>
 
   <script>
-    /* ---------- Starfield canvas ---------- */
-    const canvas = document.getElementById('stars');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = matchMedia('(pointer: fine)').matches;
+    const smallScreen = window.innerWidth <= 720;
 
-    function initStars() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      const count = Math.min(110, Math.floor(canvas.width / 14));
-      stars = Array.from({ length: count }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.3 + 0.3,
-        s: Math.random() * 0.22 + 0.04,   // drift speed
-        a: Math.random() * 0.5 + 0.15,    // alpha
-        tw: Math.random() * Math.PI * 2,  // twinkle phase
-      }));
-    }
+    /* ---------- Mobile nav ---------- */
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    navToggle.addEventListener('click', () => {
+      const open = navMenu.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open);
+    });
+    navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navMenu.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }));
 
-    function drawStars(t) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const st of stars) {
-        const alpha = st.a * (0.6 + 0.4 * Math.sin(t / 900 + st.tw));
-        ctx.beginPath();
-        ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(160, 220, 200, ${alpha})`;
-        ctx.fill();
-        st.y -= st.s;
-        if (st.y < -4) { st.y = canvas.height + 4; st.x = Math.random() * canvas.width; }
+    /* ---------- Starfield canvas (desktop only, motion allowed) ---------- */
+    const canvas = document.getElementById('stars');
+    if (!reduced && !smallScreen) {
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      function initStars() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const count = Math.min(110, Math.floor(canvas.width / 14));
+        stars = Array.from({ length: count }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.3 + 0.3,
+          s: Math.random() * 0.22 + 0.04,
+          a: Math.random() * 0.5 + 0.15,
+          tw: Math.random() * Math.PI * 2,
+        }));
       }
+      function drawStars(t) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const st of stars) {
+          const alpha = st.a * (0.6 + 0.4 * Math.sin(t / 900 + st.tw));
+          ctx.beginPath();
+          ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(160, 220, 200, ${alpha})`;
+          ctx.fill();
+          st.y -= st.s;
+          if (st.y < -4) { st.y = canvas.height + 4; st.x = Math.random() * canvas.width; }
+        }
+        requestAnimationFrame(drawStars);
+      }
+      initStars();
+      window.addEventListener('resize', initStars);
       requestAnimationFrame(drawStars);
+    } else {
+      canvas.remove();
     }
-    initStars();
-    window.addEventListener('resize', initStars);
-    if (!reduced) requestAnimationFrame(drawStars);
 
-    /* ---------- Mouse spotlight ---------- */
-    const spot = document.getElementById('spotlight');
-    window.addEventListener('pointermove', (e) => {
-      spot.style.setProperty('--mx', e.clientX + 'px');
-      spot.style.setProperty('--my', e.clientY + 'px');
-    }, { passive: true });
+    /* ---------- Mouse spotlight (fine pointers only) ---------- */
+    if (finePointer) {
+      const spot = document.getElementById('spotlight');
+      window.addEventListener('pointermove', (e) => {
+        spot.style.setProperty('--mx', e.clientX + 'px');
+        spot.style.setProperty('--my', e.clientY + 'px');
+      }, { passive: true });
+    }
 
     /* ---------- Scroll progress + active nav ---------- */
     const bar = document.getElementById('progress');
     const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
     const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-
     window.addEventListener('scroll', () => {
       const h = document.documentElement;
       bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
@@ -822,7 +976,7 @@
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
     /* ---------- Typewriter ---------- */
-    const words = ['backend development', 'Java & Spring Boot', 'clean, tested code', 'data-driven systems'];
+    const words = ['analytics engineering', 'SQL & data modeling', 'BigQuery & dbt', 'dashboards that answer questions'];
     const typedEl = document.getElementById('typed');
     let wi = 0, ci = 0, deleting = false;
     function tick() {
@@ -835,7 +989,7 @@
     }
     if (reduced) typedEl.textContent = words[0]; else tick();
 
-    /* ---------- 3D tilt (code window + stack cards) ---------- */
+    /* ---------- 3D tilt (desktop fine pointers only) ---------- */
     function addTilt(el, max = 7) {
       el.addEventListener('pointermove', (e) => {
         const r = el.getBoundingClientRect();
@@ -845,13 +999,13 @@
       });
       el.addEventListener('pointerleave', () => { el.style.transform = ''; });
     }
-    if (!reduced && matchMedia('(pointer: fine)').matches) {
+    if (!reduced && finePointer) {
       addTilt(document.getElementById('tilt-card'), 6);
       document.querySelectorAll('.stack-card').forEach(c => addTilt(c, 5));
     }
 
-    /* ---------- Magnetic buttons ---------- */
-    if (!reduced && matchMedia('(pointer: fine)').matches) {
+    /* ---------- Magnetic buttons (desktop fine pointers only) ---------- */
+    if (!reduced && finePointer) {
       document.querySelectorAll('.magnetic').forEach((btn) => {
         btn.addEventListener('pointermove', (e) => {
           const r = btn.getBoundingClientRect();
