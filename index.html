@@ -37,7 +37,7 @@
       --display: 'Space Grotesk', 'Inter', sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; background: var(--bg); }
+    html { scroll-behavior: smooth; background: var(--bg); overflow-x: hidden; overflow-x: clip; }
     body {
       background: var(--bg);
       color: var(--text);
@@ -645,6 +645,9 @@
       /* attach bg layers to the page (not the viewport) so pinch-zoom
          shows uniform dark everywhere — no panels, no gaps */
       .bg-fx, .bg-grid { position: absolute; }
+      /* single column on phones: nothing can ever exceed screen width */
+      .stack-grid, .proj-grid { grid-template-columns: 1fr; }
+      .cw-result { font-size: 11px; }
       .cw-body { font-size: 12px; padding: 16px 16px; }
       .float-chip { display: none; }
       .t-card { padding: 22px 20px; }
@@ -1011,13 +1014,23 @@
     if (!reduced && !smallScreen) {
       const ctx = canvas.getContext('2d');
       const DEPTH = 1200, FOV = 420, LINK = 72;
-      let W, H, CX, CY, pts = [];
+      let W, H, CX, CY, pts = [], far = [];
       let mx = 0, my = 0, px = 0, py = 0, gridOff = 0;
 
       function initSpace() {
         W = canvas.width = window.innerWidth;
         H = canvas.height = window.innerHeight;
         CX = W / 2; CY = H * 0.38;
+        // layer 1: distant stars covering the WHOLE screen (always visible)
+        const farCount = Math.min(150, Math.floor(W / 11));
+        far = Array.from({ length: farCount }, () => ({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: 0.4 + Math.random() * 1.1,
+          a: 0.18 + Math.random() * 0.4,
+          tw: Math.random() * Math.PI * 2,
+        }));
+        // layer 2: 3D stars with depth, drift and mouse parallax
         const count = Math.min(240, Math.floor(W / 6));
         pts = Array.from({ length: count }, () => ({
           x: (Math.random() * 2 - 1) * W,
@@ -1061,6 +1074,15 @@
         ctx.clearRect(0, 0, W, H);
         px += (mx - px) * 0.05;
         py += (my - py) * 0.05;
+        // layer 1: full-screen distant stars with gentle drift + twinkle
+        for (const f of far) {
+          const alpha = f.a * (0.55 + 0.45 * Math.sin(t / 1100 + f.tw));
+          const fx = f.x - px * 18, fy = f.y - py * 12; // subtle parallax
+          ctx.beginPath();
+          ctx.arc(fx, fy, f.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(170, 225, 205, ${alpha})`;
+          ctx.fill();
+        }
         drawGrid();
         // 3D-projected starfield with slow forward drift + mouse parallax
         const proj = [];
@@ -1078,8 +1100,8 @@
           if (x < -20 || x > W + 20 || y < -20 || y > H + 20) continue;
           const twinkle = 0.6 + 0.4 * Math.sin(t / 900 + p.tw);
           ctx.beginPath();
-          ctx.arc(x, y, 0.4 + depth * 1.8, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(160, 220, 200, ${(0.15 + depth * 0.55) * twinkle})`;
+          ctx.arc(x, y, 0.6 + depth * 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(165, 225, 205, ${(0.28 + depth * 0.6) * twinkle})`;
           ctx.fill();
           if (depth > 0.55) proj.push({ x, y });
         }
