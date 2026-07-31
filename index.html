@@ -135,6 +135,11 @@
     /* ================= Hero ================= */
     header { min-height: 100svh; display: flex; align-items: center; padding: 110px 0 40px; position: relative; }
     .hero-grid { display: grid; grid-template-columns: 1.12fr 1fr; gap: 60px; align-items: center; }
+    /* critical: allow grid children to shrink below their content width —
+       otherwise the SQL window's pre-formatted lines force the whole layout
+       wider than the phone screen (horizontal overflow / "zoomed" open) */
+    .hero-grid > div { min-width: 0; }
+    .code-wrap, .code-window { max-width: 100%; }
 
     .badge {
       display: inline-flex; align-items: center; gap: 9px;
@@ -997,17 +1002,19 @@
     const finePointer = matchMedia('(pointer: fine)').matches || window.innerWidth > 900;
     const smallScreen = window.innerWidth <= 720;
 
-    /* ---------- Mobile nav ---------- */
-    const navToggle = document.getElementById('nav-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    navToggle.addEventListener('click', () => {
-      const open = navMenu.classList.toggle('open');
-      navToggle.setAttribute('aria-expanded', open);
-    });
-    navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      navMenu.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
-    }));
+    /* ---------- Mobile nav (isolated: can never block the effects below) ---------- */
+    try {
+      const navToggle = document.getElementById('nav-toggle');
+      const navMenu = document.getElementById('nav-menu');
+      navToggle.addEventListener('click', () => {
+        const open = navMenu.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', open);
+      });
+      navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        navMenu.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }));
+    } catch (e) { console.error('nav:', e); }
 
     /* ---------- 3D starfield + synthwave grid (desktop only, exactly as the beloved version) ---------- */
     const canvas = document.getElementById('stars');
@@ -1071,6 +1078,7 @@
       }
 
       function frame(t) {
+        try {
         ctx.clearRect(0, 0, W, H);
         px += (mx - px) * 0.05;
         py += (my - py) * 0.05;
@@ -1119,6 +1127,8 @@
             }
           }
         }
+        } catch (e) { console.error('stars:', e); }
+        // the loop survives ANY error — stars can never silently die
         requestAnimationFrame(frame);
       }
       initSpace();
