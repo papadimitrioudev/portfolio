@@ -39,7 +39,10 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; background: var(--bg); overflow-x: hidden; overflow-x: clip; }
     body {
-      background: var(--bg);
+      /* NO background here — it must stay transparent so the fixed
+         negative-z-index layers (starfield, glows, grid) show through.
+         The dark color lives on <html>, which paints BELOW those layers. */
+      background: transparent;
       color: var(--text);
       font-family: var(--sans);
       line-height: 1.65;
