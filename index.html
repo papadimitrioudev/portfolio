@@ -81,7 +81,7 @@
         rgba(52, 211, 153, 0.055), transparent 70%);
       display: none;
     }
-    @media (pointer: fine) { #spotlight { display: block; } }
+    @media (pointer: fine), (min-width: 901px) { #spotlight { display: block; } }
 
     #progress {
       position: fixed; top: 0; left: 0; height: 3px; width: 0%;
@@ -532,7 +532,8 @@
       -webkit-user-select: none; user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
-    @media (prefers-reduced-motion: no-preference) and (pointer: fine) {
+    @media (prefers-reduced-motion: no-preference) and (pointer: fine),
+           (prefers-reduced-motion: no-preference) and (min-width: 901px) {
       .glitch:hover::before, .glitch:hover::after {
         content: attr(data-text); position: absolute; left: 0; top: 0;
         width: 100%; background: none; -webkit-background-clip: initial;
@@ -604,8 +605,10 @@
       #stars { display: none; }
     }
 
-    /* ================= Touch devices: no sticky hover states ================= */
-    @media (hover: none) {
+    /* ================= Touch phones/tablets only: no sticky hover states =================
+       Scoped to BOTH touch AND small screen, so desktop (even touchscreen laptops,
+       where browsers sometimes misreport hover:none) ALWAYS keeps full effects. */
+    @media (hover: none) and (max-width: 900px) {
       .stat:hover, .stack-card:hover, .proj-card:hover, .t-card:hover, .tag:hover {
         transform: none; box-shadow: none; border-color: var(--border);
       }
@@ -983,7 +986,9 @@
 
   <script>
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const finePointer = matchMedia('(pointer: fine)').matches;
+    // treat any large screen as "desktop": full effects even if the browser
+    // misreports pointer/hover capabilities (common on touchscreen laptops)
+    const finePointer = matchMedia('(pointer: fine)').matches || window.innerWidth > 900;
     const smallScreen = window.innerWidth <= 720;
 
     /* ---------- Mobile nav ---------- */
