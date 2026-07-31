@@ -222,6 +222,8 @@
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.025) inset;
       overflow: hidden;
       transform-style: preserve-3d;
+      will-change: transform;
+      backface-visibility: hidden;
       transition: transform .25s ease-out, box-shadow .3s;
     }
     .code-window::before {
@@ -342,6 +344,7 @@
       backdrop-filter: blur(8px);
       transition: transform .25s ease-out, border-color .25s, box-shadow .3s;
       transform-style: preserve-3d; will-change: transform;
+      backface-visibility: hidden;
     }
     .stack-card:hover {
       border-color: var(--border-hover);
@@ -1065,50 +1068,59 @@
         }, { passive: true });
       }
 
-      function drawGrid() {
+      function drawGrid(dt) {
         // hero-only: fades out as you scroll into content
         const fade = Math.max(0, 1 - (window.scrollY || 0) / (H * 0.85));
+        gridOff += 0.00075 * dt; // time-based, immune to dropped frames
         if (fade <= 0.01) return;
         const HY = H * 0.72, VPX = CX + px * 40;
+        ctx.strokeStyle = 'rgb(52, 211, 153)';
         for (let k = 0; k < 14; k++) {
           const u = ((k + gridOff) % 14) / 14;
           const y = HY + (H - HY) * u * u;
+          ctx.globalAlpha = fade * (0.02 + u * 0.16);
+          ctx.lineWidth = u > 0.85 ? 1.6 : 1;
           ctx.beginPath();
           ctx.moveTo(0, y); ctx.lineTo(W, y);
-          ctx.strokeStyle = `rgba(52, 211, 153, ${fade * (0.02 + u * 0.16)})`;
-          ctx.lineWidth = u > 0.85 ? 1.6 : 1;
           ctx.stroke();
         }
+        ctx.strokeStyle = 'rgb(56, 189, 248)';
+        ctx.lineWidth = 1;
         for (let i = -10; i <= 10; i++) {
           const xb = VPX + i * (W / 14);
+          ctx.globalAlpha = fade * Math.max(0.03, 0.16 - Math.abs(i) * 0.012);
           ctx.beginPath();
           ctx.moveTo(VPX, HY); ctx.lineTo(xb, H);
-          ctx.strokeStyle = `rgba(56, 189, 248, ${fade * Math.max(0.03, 0.16 - Math.abs(i) * 0.012)})`;
-          ctx.lineWidth = 1;
           ctx.stroke();
         }
-        gridOff += 0.012;
+        ctx.globalAlpha = 1;
       }
 
+      let lastT = 0;
+      // pre-allocated buffers: zero garbage per frame → no GC stutter
+      const projX = new Float32Array(300), projY = new Float32Array(300);
       function frame(t) {
         try {
+        const dt = lastT ? Math.min(t - lastT, 50) : 16; // real elapsed time, capped
+        lastT = t;
         ctx.clearRect(0, 0, W, H);
         px += (mx - px) * 0.05;
         py += (my - py) * 0.05;
         // layer 1: full-screen distant stars with gentle drift + twinkle
+        ctx.fillStyle = 'rgb(170, 225, 205)';
         for (const f of far) {
-          const alpha = f.a * (0.55 + 0.45 * Math.sin(t / 1100 + f.tw));
-          const fx = f.x - px * 18, fy = f.y - py * 12; // subtle parallax
+          ctx.globalAlpha = f.a * (0.55 + 0.45 * Math.sin(t / 1100 + f.tw));
           ctx.beginPath();
-          ctx.arc(fx, fy, f.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(170, 225, 205, ${alpha})`;
+          ctx.arc(f.x - px * 18, f.y - py * 12, f.r, 0, Math.PI * 2);
           ctx.fill();
         }
-        drawGrid();
-        // 3D-projected starfield with slow forward drift + parallax
-        const proj = [];
+        ctx.globalAlpha = 1;
+        drawGrid(dt);
+        // 3D-projected starfield with time-based drift + parallax
+        let pn = 0;
+        ctx.fillStyle = 'rgb(165, 225, 205)';
         for (const p of pts) {
-          p.z -= 0.4;
+          p.z -= 0.025 * dt; // time-based: dropped frames never cause jumps
           if (p.z < 1) {
             p.z = DEPTH;
             p.x = (Math.random() * 2 - 1) * W;
@@ -1120,26 +1132,30 @@
           const y = CY + (p.y - py * 260 * depth) * s;
           if (x < -20 || x > W + 20 || y < -20 || y > H + 20) continue;
           const twinkle = 0.6 + 0.4 * Math.sin(t / 900 + p.tw);
+          ctx.globalAlpha = (0.28 + depth * 0.6) * twinkle;
           ctx.beginPath();
           ctx.arc(x, y, 0.6 + depth * 2.2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(165, 225, 205, ${(0.28 + depth * 0.6) * twinkle})`;
           ctx.fill();
-          if (depth > 0.55) proj.push({ x, y });
+          if (depth > 0.55 && pn < 300) { projX[pn] = x; projY[pn] = y; pn++; }
         }
         // constellation lines between near (bright) stars
-        for (let i = 0; i < proj.length; i++) {
-          for (let j = i + 1; j < proj.length; j++) {
-            const d = Math.hypot(proj[i].x - proj[j].x, proj[i].y - proj[j].y);
-            if (d < LINK) {
+        const L2 = LINK * LINK;
+        ctx.strokeStyle = 'rgb(82, 190, 170)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < pn; i++) {
+          for (let j = i + 1; j < pn; j++) {
+            const dx = projX[i] - projX[j], dy = projY[i] - projY[j];
+            const d2 = dx * dx + dy * dy;
+            if (d2 < L2) {
+              ctx.globalAlpha = (1 - Math.sqrt(d2) / LINK) * 0.22;
               ctx.beginPath();
-              ctx.moveTo(proj[i].x, proj[i].y);
-              ctx.lineTo(proj[j].x, proj[j].y);
-              ctx.strokeStyle = `rgba(82, 190, 170, ${(1 - d / LINK) * 0.22})`;
-              ctx.lineWidth = 1;
+              ctx.moveTo(projX[i], projY[i]);
+              ctx.lineTo(projX[j], projY[j]);
               ctx.stroke();
             }
           }
         }
+        ctx.globalAlpha = 1;
         } catch (e) { console.error('stars:', e); }
         // the loop survives ANY error — stars can never silently die
         requestAnimationFrame(frame);
@@ -1199,13 +1215,19 @@
 
     /* ---------- 3D tilt (desktop fine pointers only) ---------- */
     function addTilt(el, max = 7) {
+      // no CSS transition while the pointer moves — transitions fighting
+      // per-frame transform updates is what causes text shimmer/flicker
+      el.addEventListener('pointerenter', () => { el.style.transition = 'none'; });
       el.addEventListener('pointermove', (e) => {
         const r = el.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - 0.5;
         const py = (e.clientY - r.top) / r.height - 0.5;
         el.style.transform = `rotateY(${px * max}deg) rotateX(${-py * max}deg)`;
       });
-      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+      el.addEventListener('pointerleave', () => {
+        el.style.transition = 'transform .35s ease';
+        el.style.transform = '';
+      });
     }
     if (!reduced && finePointer) {
       addTilt(document.getElementById('tilt-card'), 6);
