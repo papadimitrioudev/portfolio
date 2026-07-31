@@ -441,7 +441,7 @@
     }
     .progress-track {
       height: 10px; background: rgba(45,62,88,.5); border-radius: 99px;
-      overflow: hidden; margin: 0 0 10px; position: relative; z-index: 1;
+      margin: 0 0 10px; position: relative; z-index: 1;
     }
     .progress-fill {
       height: 100%; width: 3%;
@@ -513,6 +513,35 @@
       color: var(--muted); font-size: 13px; font-family: var(--mono);
     }
     footer .pr { color: var(--accent); }
+
+    /* ================= Wow layer (motion-safe only) ================= */
+    @media (prefers-reduced-motion: no-preference) {
+      .enter { opacity: 0; transform: translateY(22px); animation: riseIn .75s cubic-bezier(.2,.7,.3,1) forwards; }
+      .enter-1 { animation-delay: .05s; } .enter-2 { animation-delay: .15s; }
+      .enter-3 { animation-delay: .25s; } .enter-4 { animation-delay: .35s; }
+      .enter-5 { animation-delay: .45s; } .enter-6 { animation-delay: .55s; }
+      .enter-7 { animation-delay: .4s; }
+      .cw-result { opacity: 0; transform: translateY(6px); transition: opacity .5s ease, transform .5s ease; }
+      .term-line { opacity: 0; transform: translateX(-6px); transition: opacity .25s ease, transform .25s ease; }
+    }
+    @keyframes riseIn { to { opacity: 1; transform: none; } }
+    .cw-result {
+      border-top: 1px dashed var(--border);
+      padding: 14px 24px 18px; font-family: var(--mono);
+      font-size: 12.6px; line-height: 1.9; white-space: pre; overflow-x: auto;
+      color: var(--text);
+    }
+    .cw-result.show { opacity: 1; transform: none; }
+    .res-meta { color: var(--muted); font-size: 11.5px; }
+    .res-head { color: var(--accent2); }
+    .term-line { display: block; }
+    .term-line.show { opacity: 1; transform: none; }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    .ms-dot {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--bg-soft); border: 2px solid var(--accent2); z-index: 2;
+    }
 
     /* ================= Reveal ================= */
     .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
@@ -593,25 +622,25 @@
   <header>
     <div class="container hero-grid">
       <div>
-        <span class="badge"><span class="dot"></span>support → data, in public — Athens</span>
-        <h1>Panagiotis<br><span class="grad">Papadimitriou</span></h1>
-        <p class="hero-sub">I'm building toward <span class="typed" id="typed">analytics engineering</span><span class="caret" aria-hidden="true">_</span></p>
-        <p class="hero-desc">
+        <span class="badge enter enter-1"><span class="dot"></span>support → data, in public — Athens</span>
+        <h1 class="enter enter-2">Panagiotis<br><span class="grad">Papadimitriou</span></h1>
+        <p class="hero-sub enter enter-3">I'm building toward <span class="typed" id="typed">analytics engineering</span><span class="caret" aria-hidden="true">_</span></p>
+        <p class="hero-desc enter enter-4">
           Telecom support professional pursuing an <strong>MSc in Data Analytics</strong>,
           training hands-on in <strong>SQL, data modeling, BigQuery, dbt &amp; Power BI</strong> —
           writing every query myself, the hard way.
         </p>
-        <div class="btn-row">
+        <div class="btn-row enter enter-5">
           <a class="btn btn-primary magnetic" href="Panagiotis_Papadimitriou_CV.pdf" download>Download CV</a>
           <a class="btn btn-ghost magnetic" href="#contact">Get in touch</a>
         </div>
-        <div class="hero-socials">
+        <div class="hero-socials enter enter-6">
           <a href="https://github.com/papadimitrioudev" target="_blank" rel="noopener">github ↗</a>
           <a href="https://www.linkedin.com/in/panagiotis-papadimitriou2003" target="_blank" rel="noopener">linkedin ↗</a>
         </div>
       </div>
 
-      <div class="code-wrap">
+      <div class="code-wrap enter enter-7">
         <span class="float-chip chip-sql" aria-hidden="true">🗄 SQL</span>
         <span class="float-chip chip-dbt" aria-hidden="true">⚙ dbt</span>
         <div class="code-window" id="tilt-card">
@@ -629,6 +658,10 @@
 <span class="tk-kw">FROM</span> <span class="tk-cl">daily_practice</span>
 <span class="tk-kw">WHERE</span> written_by = <span class="tk-st">'me'</span>
   <span class="tk-kw">AND</span> pasted_blindly = <span class="tk-kw">FALSE</span>;</div>
+          <div class="cw-result" id="sql-result" aria-hidden="true"><span class="res-head"> base        │ focus                  │ queries_by_hand</span>
+ ───────────┼────────────────────────┼────────────────
+ Athens, GR │ SQL • modeling • dbt   │ <span id="qcount">counting…</span>
+<span class="res-meta">1 row in set (0.042 s)</span></div>
         </div>
       </div>
     </div>
@@ -674,22 +707,22 @@
             <span class="cw-dot" style="background:#28c840"></span>
             <span class="cw-title">bash — about</span>
           </div>
-          <div class="term-body">
-<span class="pr">$</span> cat profile.yml<br>
-<span class="key">location:</span> <span class="val">Athens, Greece</span><br>
-<span class="key">degree:</span> <span class="val">BSc Computer Science</span><br>
-<span class="key">msc:</span> <span class="val">Data Analytics — final year</span><br>
-<span class="key">work:</span> <span class="val">Telecom Support @ BFS (Nova)</span><br>
-<span class="key">target:</span> <span class="val">Analytics Engineering</span><br>
-<span class="pr">$</span> <span class="cm">█</span>
+          <div class="term-body" id="term-body">
+<span class="term-line"><span class="pr">$</span> cat profile.yml</span>
+<span class="term-line"><span class="key">location:</span> <span class="val">Athens, Greece</span></span>
+<span class="term-line"><span class="key">degree:</span> <span class="val">BSc Computer Science</span></span>
+<span class="term-line"><span class="key">msc:</span> <span class="val">Data Analytics — final year</span></span>
+<span class="term-line"><span class="key">work:</span> <span class="val">Telecom Support @ BFS (Nova)</span></span>
+<span class="term-line"><span class="key">target:</span> <span class="val">Analytics Engineering</span></span>
+<span class="term-line"><span class="pr">$</span> <span class="cm">█</span></span>
           </div>
         </div>
       </div>
 
       <div class="stats-row reveal reveal-d3">
-        <div class="stat"><div class="num">2024</div><div class="lbl">BSc Computer Science</div></div>
-        <div class="stat"><div class="num">3</div><div class="lbl">portfolio projects in the making</div></div>
-        <div class="stat"><div class="num">100%</div><div class="lbl">of roadmap queries written by hand</div></div>
+        <div class="stat"><div class="num" data-count="2024">2024</div><div class="lbl">BSc Computer Science</div></div>
+        <div class="stat"><div class="num" data-count="3">3</div><div class="lbl">portfolio projects in the making</div></div>
+        <div class="stat"><div class="num" data-count="100" data-suffix="%">100%</div><div class="lbl">of roadmap queries written by hand</div></div>
       </div>
     </div>
   </section>
@@ -811,7 +844,7 @@
           <span class="chip">statistics</span>
           <span class="chip">project 3 — mar '27</span>
         </div>
-        <div class="progress-track" role="progressbar" aria-valuenow="3" aria-valuemin="0" aria-valuemax="100" aria-label="Roadmap progress"><div class="progress-fill"></div></div>
+        <div class="progress-track" role="progressbar" aria-valuenow="3" aria-valuemin="0" aria-valuemax="100" aria-label="Roadmap progress"><div class="progress-fill"></div><span class="ms-dot" style="left:28%" title="Project 1 — Oct 2026" aria-hidden="true"></span><span class="ms-dot" style="left:64%" title="Project 2 — Jan 2027" aria-hidden="true"></span><span class="ms-dot" style="left:91%" title="Project 3 — Mar 2027" aria-hidden="true"></span></div>
         <p class="progress-label">roadmap progress — updated as I go, honestly</p>
       </div>
     </div>
@@ -923,8 +956,24 @@
           tw: Math.random() * Math.PI * 2,
         }));
       }
+      const LINK_DIST = 95;
       function drawStars(t) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // constellation lines between nearby stars (data-network feel)
+        for (let i = 0; i < stars.length; i++) {
+          for (let j = i + 1; j < stars.length; j++) {
+            const dx = stars[i].x - stars[j].x, dy = stars[i].y - stars[j].y;
+            const d = Math.hypot(dx, dy);
+            if (d < LINK_DIST) {
+              ctx.beginPath();
+              ctx.moveTo(stars[i].x, stars[i].y);
+              ctx.lineTo(stars[j].x, stars[j].y);
+              ctx.strokeStyle = `rgba(82, 190, 170, ${(1 - d / LINK_DIST) * 0.14})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
         for (const st of stars) {
           const alpha = st.a * (0.6 + 0.4 * Math.sin(t / 900 + st.tw));
           ctx.beginPath();
@@ -1020,6 +1069,60 @@
     /* ---------- Marquee duplicate for seamless loop ---------- */
     const mq = document.getElementById('marquee');
     mq.innerHTML += mq.innerHTML;
+
+    /* ---------- SQL "run" simulation in hero code window ---------- */
+    const sqlResult = document.getElementById('sql-result');
+    const qcount = document.getElementById('qcount');
+    if (reduced) {
+      sqlResult.classList.add('show');
+    } else {
+      setTimeout(() => {
+        sqlResult.classList.add('show');
+        // playful, honest: the counter is literally still counting
+        let dots = 0;
+        setInterval(() => {
+          dots = (dots + 1) % 4;
+          qcount.textContent = 'counting' + '.'.repeat(dots || 3);
+        }, 600);
+      }, 1400);
+    }
+
+    /* ---------- Stat counters (count up on reveal) ---------- */
+    const nums = document.querySelectorAll('.stat .num[data-count]');
+    if (!reduced && 'IntersectionObserver' in window) {
+      const numObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          numObs.unobserve(e.target);
+          const target = +e.target.dataset.count;
+          const suffix = e.target.dataset.suffix || '';
+          const t0 = performance.now(), dur = 1100;
+          function step(t) {
+            const p = Math.min((t - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            e.target.textContent = Math.round(target * eased) + suffix;
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }, { threshold: 0.6 });
+      nums.forEach(n => numObs.observe(n));
+    }
+
+    /* ---------- Terminal line-by-line output ---------- */
+    const termLines = document.querySelectorAll('#term-body .term-line');
+    if (reduced || !('IntersectionObserver' in window)) {
+      termLines.forEach(l => l.classList.add('show'));
+    } else {
+      const termObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          termObs.unobserve(e.target);
+          termLines.forEach((line, i) => setTimeout(() => line.classList.add('show'), 250 + i * 180));
+        });
+      }, { threshold: 0.4 });
+      termObs.observe(document.getElementById('term-body'));
+    }
   </script>
 </body>
 </html>
