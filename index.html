@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Panagiotis Papadimitriou — Data &amp; Analytics Engineering</title>
   <meta name="description" content="Panagiotis Papadimitriou — telecom support professional and MSc Data Analytics student building toward analytics engineering: SQL, data modeling, BigQuery, dbt, Power BI. Athens, Greece." />
   <link rel="canonical" href="https://papadimitrioudev.netlify.app/" />
@@ -602,6 +602,16 @@
       html { scroll-behavior: auto; }
       .reveal { opacity: 1; transform: none; }
       #stars { display: none; }
+    }
+
+    /* ================= Touch devices: no sticky hover states ================= */
+    @media (hover: none) {
+      .stat:hover, .stack-card:hover, .proj-card:hover, .t-card:hover, .tag:hover {
+        transform: none; box-shadow: none; border-color: var(--border);
+      }
+      .hero-socials a:hover, .socials a:hover { transform: none; }
+      .btn-primary:hover { box-shadow: 0 6px 28px rgba(52, 211, 153, 0.28); }
+      .nav-cv:hover { box-shadow: none; background: none; }
     }
 
     /* ================= Responsive ================= */
